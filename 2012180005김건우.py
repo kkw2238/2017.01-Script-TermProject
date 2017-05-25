@@ -44,12 +44,12 @@ def getDataToApi():
     print(uri)
     conn.request("GET", uri)
     req = conn.getresponse()
-    print(req.status, req.reason)
-    print(req.read().decode('utf-8'))
+    req.status, req.reason
 
     if int(req.status) == 200:
         print("Data Downloading Complete!")
-        return extractBookData(req.read())
+        return extractBookData(req.read().decode('utf-8'))
+
     else:
         print("OpenAPI request has been failed!! please retry")
         return None
@@ -59,15 +59,15 @@ def extractBookData(strXml):
     from xml.etree import ElementTree
     tree = ElementTree.fromstring(strXml)
     print(strXml)
-    # Book 엘리먼트를 가져옵니다.
+
     itemElements = tree.getiterator("item")  # return list type
     print(itemElements)
     for item in itemElements:
-        isbn = item.find("isbn")
-        strTitle = item.find("title")
-        print(strTitle)
-        if len(strTitle.text) > 0:
-            return {"ISBN": isbn.text, "title": strTitle.text}
+        dataTime = item.find("dataTime")
+        mangName = item.find("mangName")
+        print(mangName)
+        if len(mangName.text) > 0:
+            return {"dataTime": dataTime.text, "mangName": mangName.text}
 
 
 def checkConnection():
