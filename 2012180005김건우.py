@@ -44,7 +44,9 @@ def getDataToApi():
     print(uri)
     conn.request("GET", uri)
     req = conn.getresponse()
-    print(req.status)
+    print(req.status, req.reason)
+    print(req.read().decode('utf-8'))
+
     if int(req.status) == 200:
         print("Data Downloading Complete!")
         return extractBookData(req.read())
