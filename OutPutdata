@@ -1,0 +1,18 @@
+stationName	측정소 명           1
+mangName	측정망 정보
+dataTime	측정일시            2
+so2Value	아황산가스 농도
+coValue	일산화탄소 농도          3
+o3Value	오존 농도               4
+no2Value	이산화질소 농도
+pm10Value	미세먼지(PM10)      5
+pm10Value24	미세먼지(PM10)
+pm25Value	미세먼지(PM2.5)
+pm25Value24	미세먼지(PM2.5)
+khai	통합대기환경수치
+khaiGrade	통합대기환경지수    6
+so2Grade	아황산가스 지수
+coGrade	일산화탄소 지수
+o3Grade	오존 지수
+no2Grade	이산화질소 지수
+pm10Grade	미세먼지(PM10)      7

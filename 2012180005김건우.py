@@ -1,85 +1,96 @@
 # -*- coding: cp949 -*-
+import getData
+import getStationData
+import sendMail
 
-from http.client import HTTPConnection
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import urllib
-import sys
+DatasForMail = ""
+run = True
 
-#reload(sys)
-#sys.setdefaultencoding('utf-8')
+def PrintMenu():
+    print("----------------------- Menu -----------------------")
+    print("S : 시도, 측정소 검색")
+    print("M : 현재 데이터를 메일로 전송")
+    print("Q : 나가기")
+    Answer = input("입력 : ")
+    InputMenu(Answer)
 
-##http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?
+def InputMenu(Answer) :
+    global run, DatasForMail
 
-##global
-conn = None
-# regKey = 'z2mxgo5Uk0sWx%2Fchtf0SL2R3i4RnnH4VvlkTtvUwC1ZJYUNKCBu3keO0oBQz9yhg8Tu8q7xpK1JIJ2naACLMiA%3D%3D'
+    if Answer is "S" :
+        SearchData()
 
-# 네이버 OpenAPI 접속 정보 information
-server = "openapi.airkorea.or.kr"
+    elif Answer is "M" :
+        sendMail.SendMail(DatasForMail)
 
-def userURIBuilder(server, **user):
-    str = "http://" + server + "/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty" + "?"
-    for key in user.keys():
-        str += key + "=" + user[key] + "&"
-    return str
+    elif Answer is "Q" :
+        run = False
 
+def PrintData(Datas) :
+    global DatasForMail
+    for Data in Datas :
+        print(Data)
+        DatasForMail += Data.__str__() + "굈"
 
-def connectOpenAPIServer():
-    global conn, server
-    conn = HTTPConnection(server)
-
-# stationName=종로구&
-# dataTerm=month&
-# pageNo=1&
-# numOfRows=10&
-# ServiceKey=z2mxgo5Uk0sWx%2Fchtf0SL2R3i4RnnH4VvlkTtvUwC1ZJYUNKCBu3keO0oBQz9yhg8Tu8q7xpK1JIJ2naACLMiA%3D%3D&
-# ver=1.3
-
-def getDataToApi():
-    global server, regKey, conn
-    if conn == None:
-        connectOpenAPIServer()
-    uri = userURIBuilder(server, stationName=urllib.parse.quote("종로구"), dataTerm="month", pageNo="1", numOfRows="10",ServiceKey=
-    """z2mxgo5Uk0sWx%2Fchtf0SL2R3i4RnnH4VvlkTtvUwC1ZJYUNKCBu3keO0oBQz9yhg8Tu8q7xpK1JIJ2naACLMiA%3D%3D""",ver="1.3")
-    print(uri)
-    conn.request("GET", uri)
-    req = conn.getresponse()
-    req.status, req.reason
-
-    if int(req.status) == 200:
-        print("Data Downloading Complete!")
-        return extractBookData(req.read().decode('utf-8'))
-
-    else:
-        print("OpenAPI request has been failed!! please retry")
-        return None
-
-
-def extractBookData(strXml):
-    from xml.etree import ElementTree
-    tree = ElementTree.fromstring(strXml)
-    print(strXml)
-
-    itemElements = tree.getiterator("item")  # return list type
-    print(itemElements)
-    for item in itemElements:
-        dataTime = item.find("dataTime")
-        mangName = item.find("mangName")
-        print(mangName)
-        if len(mangName.text) > 0:
-            return {"dataTime": dataTime.text, "mangName": mangName.text}
-
-
-def checkConnection():
-    global conn
-    if conn == None:
-        print("Error : connection is fail")
-        return False
-    return True
+    print(DatasForMail)
 
 def main() :
+    global run
 
-    getDataToApi()
+    while(run) :
+        PrintMenu()
 
+def SearchData() :
+    global run
+
+    SidoList = ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "경기", "강원", "충북", "충남", "전북", "전남",
+                "경북", "경남", "제주", "세종"]
+
+    SidoList.sort()
+
+    print(SidoList)
+    Select = input("찾고자 하는 지역을 선택해 주세요 : ")
+
+    if Select in SidoList:
+        DescriptorMonitoringStation(Select)
+
+    else:
+        print("다시 확인해 주세요.")
+
+
+def DescriptorMonitoringStation(Sido):
+    MonitoringStation = getData.GetStationInSidoName(Sido)
+    MonitoringStation.append("모두")
+
+    Page = 1
+    Again = True
+    Data = []
+
+    print(MonitoringStation)
+    Select = input("자세한 결과를 원하는 측정소를 입력해 주세요 : ")
+
+    while(Again) :
+
+        if( Select == "모두" ) :
+            (Data , Continue) = getData.getSidoDataToApi("All", Sido, Page)
+            PrintData(Data)
+
+        elif( Select in MonitoringStation) :
+            (Data, Continue) = getStationData.getStationDataToApi("All", Select, Page)
+
+        PrintData(Data)
+
+        if Data != None and Continue:
+            NextPage = input("다음 페이지를 출력 하시겠습니까?(Y/N) : ")
+
+            if NextPage == "Y":
+                Page += 1
+
+            else:
+                Again = False
+
+        elif not Continue:
+            print("데이터가 더 이상 없습니다.")
+            Again = False
 
 main()
