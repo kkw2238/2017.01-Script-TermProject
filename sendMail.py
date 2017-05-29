@@ -27,7 +27,7 @@ def SendMail(Datas) :
     msg['To'] = recipientAddr
 
     for Data in Datas :
-        pass
+        text += (Data.__str__() + " ")
 
     # MIME 문서를 생성합니다.
     htmlFD = open(htmlFileName, 'rb')
