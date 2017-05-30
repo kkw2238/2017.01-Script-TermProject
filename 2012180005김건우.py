@@ -2,6 +2,7 @@
 import getData
 import getStationData
 import sendMail
+import ShareFunc
 
 DatasForMail = ""
 run = True
@@ -26,13 +27,26 @@ def InputMenu(Answer) :
     elif Answer is "Q" :
         run = False
 
+        ShareFunc.Quit()
+
+
 def PrintData(Datas) :
     global DatasForMail
-    for Data in Datas :
-        print(Data)
-        DatasForMail += Data.__str__() + "굈"
 
-    print(DatasForMail)
+    StringData = ""
+
+    for Data in Datas :
+        for item in Data.items() :
+            key , value = item
+            DatasForMail += (key + value + "<br>" )
+            StringData += (key + value + """
+""")
+
+        DatasForMail += "<br>"
+        StringData += """
+"""
+
+    print(StringData)
 
 def main() :
     global run
@@ -64,33 +78,44 @@ def DescriptorMonitoringStation(Sido):
 
     Page = 1
     Again = True
+    Description = True
     Data = []
 
-    print(MonitoringStation)
-    Select = input("자세한 결과를 원하는 측정소를 입력해 주세요 : ")
+    while( Description ) :
+        Again = True
 
-    while(Again) :
+        print(MonitoringStation)
+        Select = input("자세한 결과를 원하는 측정소를 입력해 주세요 : ")
 
-        if( Select == "모두" ) :
-            (Data , Continue) = getData.getSidoDataToApi("All", Sido, Page)
+        while(Again) :
+
+            if( Select in MonitoringStation) :
+                if (Select == "모두"):
+                    (Data, Continue) = getData.getSidoDataToApi("All", Sido, Page)
+
+                else :
+                    (Data, Continue) = getStationData.getStationDataToApi("All", Select, Page)
+
+            else :
+                print("입력을 확인해 주세요 ")
+                Again = False
+                break
+
             PrintData(Data)
 
-        elif( Select in MonitoringStation) :
-            (Data, Continue) = getStationData.getStationDataToApi("All", Select, Page)
+            if Data != None and Continue:
+                NextPage = input("다음 페이지를 출력 하시겠습니까?(Y/N) : ")
 
-        PrintData(Data)
+                if NextPage == "Y":
+                    Page += 1
 
-        if Data != None and Continue:
-            NextPage = input("다음 페이지를 출력 하시겠습니까?(Y/N) : ")
+                else:
+                    Again = False
+                    Description = False
 
-            if NextPage == "Y":
-                Page += 1
-
-            else:
+            elif not Continue:
+                print("데이터가 더 이상 없습니다.")
                 Again = False
-
-        elif not Continue:
-            print("데이터가 더 이상 없습니다.")
-            Again = False
+                Description = False
 
 main()

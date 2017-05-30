@@ -52,28 +52,35 @@ def extractParseData(strXml, Type, Service):
     from xml.etree import ElementTree
 
     tree = ElementTree.fromstring(strXml)
-    # 파싱 결과에서 items에 속한 요소를 List로 묶어서 보내준다.
-    # 현재 상태 items(item(stationName ...), item(stationName ...) , ...)
-    DataList , DataCount = ListtoElement(tree.getiterator("items"), Type, Service)
+
+    # tree.getiterator("items") : 파싱 결과에서 items에 속한 요소를 List로 묶어서 보내준다.
+    # 현재 상태 Datas[items[(item(stationName ...), item(stationName ...) , ...)]]
+    DataList , DataCount = ElementtoList(tree.getiterator("items"), Type, Service)
 
     return DataList , DataCount
 
 
 # 파싱해온 데이터를 List로 만들어준다.
-def ListtoElement(itemElements, Type, Service) :
+def ElementtoList(itemElements, Type, Service) :
 
     List = []
 
     DataCount = 0
 
+    # 현재 상태 Datas[items[item(stationName ...), item(stationName ...) , ...)]]
+    # Datas(itemElements)에서 items를 1개씩 꺼낸다.
     for item in itemElements:
 
+        # items에 있는 item을 꺼낸다.
         for Data in item :
 
             Dic = {}
 
+            # item에 있는 Data내용을 찾는다.
             if Service == 1 :
                 stationName = Data.find("stationName")
+
+                # .text : 데이터 내부 <stationName> text </stationName>의 text를 꺼내온다.
                 Dic["지역"] = stationName.text
 
                 if (Type == "StationOnly"):
@@ -81,6 +88,7 @@ def ListtoElement(itemElements, Type, Service) :
                     DataCount += 1
                     continue
 
+            # 이하 동문
             dataTime = MakeaStringtoTime(Data.find("dataTime").text)  # 측정 시간
             coValue = Data.find("coValue")  # 일산화 탄소 농도
             pm10Value = Data.find("pm10Value")  # 미세먼지 농도
@@ -88,8 +96,9 @@ def ListtoElement(itemElements, Type, Service) :
             pm10Grade = Data.find("pm10Grade")  # 미세먼지 등급
             khaiGrade = Data.find("khaiGrade")  # 종합 등급
 
+            # 데이터가 없지 않으면 Dict형식으로 만들어 저장하고
             if Data is not None :
-                Dic.update( {"측정 시간 ": dataTime,
+                Dic.update( {"측정 시간 : ": dataTime,
                         "일산화 탄소 농도 : ": coValue.text,
                         "미세먼지 농도 : ": pm10Value.text,
                         "오존 농도 : ": o3Value.text,
@@ -97,8 +106,15 @@ def ListtoElement(itemElements, Type, Service) :
                         "종합 등급 : ": khaiGrade.text
                         })
 
+                # 리스트에 넣어준다.
                 List.append(Dic)
 
             DataCount += 1
 
         return List , DataCount
+
+def Quit() :
+    global Conn
+
+    if Conn != None :
+        Conn.close()

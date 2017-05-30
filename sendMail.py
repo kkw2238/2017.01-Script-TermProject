@@ -7,14 +7,12 @@ from email.mime.text import MIMEText
 #global value
 host = "smtp.gmail.com" # Gmail STMP 서버 주소.
 port = "587"
-htmlFileName = "logo.html"
+htmlFileName = "Data.html"
 
 
 
 def SendMail(Datas) :
     global host, port, htmlFileName
-
-    text = ""
 
     print("메일 보내는 항목입니다. 보내는 사람의 계정 보호를 풀어야 보내질 수 있습니다. ")
     senderAddr = input("보내는 사람의 아이디를 적어주세요 : ")  # 보내는 사람 email 주소.
@@ -25,9 +23,6 @@ def SendMail(Datas) :
     msg['Subject'] = input("제목을 입력해 주세요 : ")  # 내용
     msg['From'] = senderAddr  #
     msg['To'] = recipientAddr
-
-    for Data in Datas :
-        text += (Data.__str__() + " ")
 
     # MIME 문서를 생성합니다.
     htmlFD = open(htmlFileName, 'rb')
