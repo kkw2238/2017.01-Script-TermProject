@@ -30,14 +30,35 @@ def InputMenu(Answer) :
         ShareFunc.Quit()
 
 
-def PrintData(Datas) :
+def PrintData(Datas, Sido, Selected) :
     global DatasForMail
 
+    if (Datas == None ) :
+        return None
+
+    DatasForMail = ""
     StringData = ""
+
+    if Selected != None :
+        DatasForMail += ( Sido + " " + Selected + "측정소 결과 데이터 입니다.<br>" )
+        StringData += ( Sido + " " + Selected + """측정소 결과 데이터 입니다.
+""" )
+
+    else :
+        DatasForMail += (Sido + "에 위치한 각 측정소 결과 데이터 입니다.<br>")
+        StringData += (Sido + """에 위치한 각 측정소 결과 데이터 입니다.
+""")
 
     for Data in Datas :
         for item in Data.items() :
             key , value = item
+
+            if value == None :
+                DatasForMail += (key + "알 수 없음" + "<br>")
+                StringData += (key + """알 수 없음
+""")
+                continue
+
             DatasForMail += (key + value + "<br>" )
             StringData += (key + value + """
 """)
@@ -92,16 +113,18 @@ def DescriptorMonitoringStation(Sido):
             if( Select in MonitoringStation) :
                 if (Select == "모두"):
                     (Data, Continue) = getData.getSidoDataToApi("All", Sido, Page)
+                    PrintData(Data, Sido, None)
 
                 else :
                     (Data, Continue) = getStationData.getStationDataToApi("All", Select, Page)
+                    PrintData(Data, Sido, Select)
 
             else :
                 print("입력을 확인해 주세요 ")
                 Again = False
                 break
 
-            PrintData(Data)
+
 
             if Data != None and Continue:
                 NextPage = input("다음 페이지를 출력 하시겠습니까?(Y/N) : ")

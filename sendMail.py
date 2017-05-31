@@ -16,7 +16,8 @@ def SendMail(Datas) :
 
     print("메일 보내는 항목입니다. 보내는 사람의 계정 보호를 풀어야 보내질 수 있습니다. ")
     senderAddr = input("보내는 사람의 아이디를 적어주세요 : ")  # 보내는 사람 email 주소.
-    senderpass = input("보내는 사람의 비밀번호를 적어주세요 : ")
+    senderpass = "rlarjsdn12"
+    #senderpass = input("보내는 사람의 비밀번호를 적어주세요 : ")
     recipientAddr = input("받을 사람의 아이디를 적어주세요 : ")  # 받는 사람 email 주소.
 
     msg = MIMEBase("multipart", "alternative")
@@ -39,6 +40,17 @@ def SendMail(Datas) :
     s.starttls()
     s.ehlo()
     s.login(senderAddr, senderpass)
-    s.sendmail(senderAddr, [recipientAddr], msg.as_string())
+
+    try :
+        s.sendmail(senderAddr, [recipientAddr], msg.as_string())
+
+    except :
+        print("메일 발송에 실패했습니다. https://myaccount.google.com/lesssecureapps?pli=1 에서 계정 보호를 확인해 보거나 ")
+        print("메일 아이디 , 비밀번호를 확인해 주세요")
+        return None
+
+    else :
+        print("메일 발송에 성공했습니다. ")
+
     s.close()
 

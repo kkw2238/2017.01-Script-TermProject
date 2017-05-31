@@ -81,7 +81,7 @@ def ElementtoList(itemElements, Type, Service) :
                 stationName = Data.find("stationName")
 
                 # .text : 데이터 내부 <stationName> text </stationName>의 text를 꺼내온다.
-                Dic["지역"] = stationName.text
+                Dic["지역 : "] = stationName.text
 
                 if (Type == "StationOnly"):
                     List.append(stationName.text)
