@@ -16,8 +16,7 @@ def SendMail(Datas) :
 
     print("메일 보내는 항목입니다. 보내는 사람의 계정 보호를 풀어야 보내질 수 있습니다. ")
     senderAddr = input("보내는 사람의 아이디를 적어주세요 : ")  # 보내는 사람 email 주소.
-    senderpass = "rlarjsdn12"
-    #senderpass = input("보내는 사람의 비밀번호를 적어주세요 : ")
+    senderpass = input("보내는 사람의 비밀번호를 적어주세요 : ")
     recipientAddr = input("받을 사람의 아이디를 적어주세요 : ")  # 받는 사람 email 주소.
 
     msg = MIMEBase("multipart", "alternative")
