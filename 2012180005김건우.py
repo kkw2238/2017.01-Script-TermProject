@@ -3,6 +3,7 @@ import getData
 import getStationData
 import sendMail
 import ShareFunc
+import tkinter
 
 DatasForMail = ""
 run = True
