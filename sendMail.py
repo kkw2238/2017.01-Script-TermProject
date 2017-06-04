@@ -39,6 +39,17 @@ def SendMail(Datas) :
     s.starttls()
     s.ehlo()
     s.login(senderAddr, senderpass)
-    s.sendmail(senderAddr, [recipientAddr], msg.as_string())
+
+    try :
+        s.sendmail(senderAddr, [recipientAddr], msg.as_string())
+
+    except :
+        print("메일 발송에 실패했습니다. https://myaccount.google.com/lesssecureapps?pli=1 에서 계정 보호를 확인해 보거나 ")
+        print("메일 아이디 , 비밀번호를 확인해 주세요")
+        return None
+
+    else :
+        print("메일 발송에 성공했습니다. ")
+
     s.close()
 
