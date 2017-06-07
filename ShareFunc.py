@@ -4,6 +4,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib
 import sys
 
+
 Conn = None
 StationList = []
 Server = "openapi.airkorea.or.kr"
@@ -118,3 +119,8 @@ def Quit() :
 
     if Conn != None :
         Conn.close()
+
+
+
+######################################################
+

@@ -8,14 +8,6 @@ import tkinter
 DatasForMail = ""
 run = True
 
-def PrintMenu():
-    print("----------------------- Menu -----------------------")
-    print("S : 시도, 측정소 검색")
-    print("M : 현재 데이터를 메일로 전송")
-    print("Q : 나가기")
-    Answer = input("입력 : ")
-    InputMenu(Answer)
-
 def InputMenu(Answer) :
     global run, DatasForMail
 
@@ -69,12 +61,6 @@ def PrintData(Datas, Sido, Selected) :
 """
 
     print(StringData)
-
-def main() :
-    global run
-
-    while(run) :
-        PrintMenu()
 
 def SearchData() :
     global run
@@ -141,5 +127,3 @@ def DescriptorMonitoringStation(Sido):
                 print("데이터가 더 이상 없습니다.")
                 Again = False
                 Description = False
-
-main()
