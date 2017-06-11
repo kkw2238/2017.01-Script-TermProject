@@ -59,7 +59,7 @@ def InitSidoSearchMenuButton():
     Sidombutton.pack()
 
     Sidombutton.config(bg = 'white', bd = 4, relief = RAISED)
-    Sidombutton.place(x = 50 , y = 100)
+    Sidombutton.place(x = 55 , y = 100)
 
 
 def SidoSelect(Sido) :
