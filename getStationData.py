@@ -11,7 +11,7 @@ def getStationDataToApi(Type, Stage, Page):
     if Conn == None:
         Conn = ShareFunc.connectOpenAPIServer()
 
-    uri = ShareFunc.userURIBuilder(Server, 0 , stationName=urllib.parse.quote(Stage), pageNo="{0}".format(Page), numOfRows="10",
+    uri = ShareFunc.userURIBuilder(Server, 0 , stationName=urllib.parse.quote(Stage), pageNo="{0}".format(Page), numOfRows="1",
                                    dataTerm="month",ServiceKey =
     """z2mxgo5Uk0sWx%2Fchtf0SL2R3i4RnnH4VvlkTtvUwC1ZJYUNKCBu3keO0oBQz9yhg8Tu8q7xpK1JIJ2naACLMiA%3D%3D""",ver="1.3")
 
@@ -26,6 +26,7 @@ def getStationDataToApi(Type, Stage, Page):
 
         Continue = not (DataCount < 10)
 
+        print(tmp)
         return tmp , Continue
 
     else:

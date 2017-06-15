@@ -8,21 +8,6 @@ import tkinter
 DatasForMail = ""
 run = True
 
-def InputMenu(Answer) :
-    global run, DatasForMail
-
-    if Answer is "S" :
-        SearchData()
-
-    elif Answer is "M" :
-        sendMail.SendMail(DatasForMail)
-
-    elif Answer is "Q" :
-        run = False
-
-        ShareFunc.Quit()
-
-
 def PrintData(Datas, Sido, Selected) :
     global DatasForMail
 
@@ -61,6 +46,8 @@ def PrintData(Datas, Sido, Selected) :
 """
 
     print(StringData)
+
+    return StringData
 
 def SearchData() :
     global run

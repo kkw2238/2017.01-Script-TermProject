@@ -124,3 +124,49 @@ def Quit() :
 
 ######################################################
 
+
+def PrintData(Datas, Sido, Selected, Type) :
+
+    if (Datas == None ) :
+        return None
+
+    DatasForMail = ""
+    StringData = ""
+
+    if Selected != None :
+        DatasForMail += ( Sido + " " + Selected + "측정소 결과 데이터 입니다.<br>" )
+        StringData += ( Sido + " " + Selected + """측정소 결과 데이터 입니다.
+
+""" )
+
+    else :
+        DatasForMail += (Sido + "에 위치한 각 측정소 결과 데이터 입니다.<br>")
+        StringData += (Sido + """에 위치한 각 측정소 결과 데이터 입니다.
+""")
+
+    for Data in Datas :
+        for item in Data.items() :
+            key , value = item
+
+            if value == None :
+                DatasForMail += (key + "알 수 없음" + "<br>")
+                StringData += (key + """알 수 없음
+
+""")
+                continue
+
+            DatasForMail += (key + value + "<br>" )
+            StringData += (key + value + """
+
+""")
+
+        DatasForMail += "<br>"
+        StringData += """
+
+"""
+
+    if Type == 0 :
+        return StringData
+
+    else :
+        return DatasForMail
