@@ -171,7 +171,9 @@ def InitHelp():
                 relief = 'ridge', yscrollcommand = TextScrollbar.set)
     RenderHelp.configure(state='normal')
     RenderHelp.delete(0.0, END)
-    RenderHelp.insert(INSERT, "도움말")
+    RenderHelp.insert(INSERT, """도움말
+
+    """)
 
     RenderHelp.pack()
     RenderHelp.place(x = 0, y = 0)
